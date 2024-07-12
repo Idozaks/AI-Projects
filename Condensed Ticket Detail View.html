@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Detail</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .message { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Ticket #<span id="ticketId"></span></h1>
+    <h2 id="customer"></h2>
+    <p id="issue"></p>
+    <p>Status: <span id="status"></span></p>
+    <p>Priority: <span id="priority"></span></p>
+
+    <h3>Actions</h3>
+    <button onclick="updateStatus('In Progress')">Respond</button>
+    <button onclick="updateStatus('Resolved')">Resolve</button>
+    <button onclick="updateStatus('Escalated')">Escalate</button>
+
+    <h3>Add Note</h3>
+    <textarea id="noteInput"></textarea>
+    <button onclick="addNote()">Add Note</button>
+
+    <h3>Communication History</h3>
+    <div id="history"></div>
+
+    <script>
+        const ticket = {
+            id: 12345,
+            customer: "TechCorp",
+            issue: "Login failure",
+            status: "Open",
+            priority: "High",
+            history: [
+                { sender: "Customer", message: "Can't log in." },
+                { sender: "Support", message: "Have you tried resetting your password?" }
+            ]
+        };
+
+        function renderTicket() {
+            document.getElementById('ticketId').textContent = ticket.id;
+            document.getElementById('customer').textContent = ticket.customer;
+            document.getElementById('issue').textContent = ticket.issue;
+            document.getElementById('status').textContent = ticket.status;
+            document.getElementById('priority').textContent = ticket.priority;
+            document.getElementById('history').innerHTML = ticket.history.map(h => 
+                `<div class="message">
+                    <strong>${h.sender}:</strong> ${h.message}
+                </div>`
+            ).join('');
+        }
+
+        function updateStatus(newStatus) {
+            ticket.status = newStatus;
+            renderTicket();
+        }
+
+        function addNote() {
+            const note = document.getElementById('noteInput').value;
+            if (note) {
+                ticket.history.push({ sender: "Support", message: note });
+                document.getElementById('noteInput').value = '';
+                renderTicket();
+            }
+        }
+
+        renderTicket();
+    </script>
+</body>
+</html>
